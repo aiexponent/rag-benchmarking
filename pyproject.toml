@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rag-benchmarking"
-version = "1.0.1"
+version = "1.0.2"
 description = "Framework-agnostic evaluation harness for RAG and agentic AI systems"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -40,9 +40,9 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://aiexponent.com"
-Repository = "https://github.com/aiexponenthq/rag-benchmarking"
-Documentation = "https://github.com/aiexponenthq/rag-benchmarking#readme"
-"Bug Tracker" = "https://github.com/aiexponenthq/rag-benchmarking/issues"
+Repository = "https://github.com/aiexponent/rag-benchmarking"
+Documentation = "https://github.com/aiexponent/rag-benchmarking#readme"
+"Bug Tracker" = "https://github.com/aiexponent/rag-benchmarking/issues"
 
 [project.optional-dependencies]
 test = [
