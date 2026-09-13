@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Point the shipped project URLs and the README links at the `aiexponent` GitHub org. The org was renamed from `aiexponenthq`, so `pyproject.toml` `Repository`, `Documentation` and `Bug Tracker`, the README CI badge, the clone command, and the two sibling-project links all named an owner that only resolves through a GitHub redirect.
+- `app.__version__` now reads the installed distribution metadata instead of a
+  second hardcoded copy, which had drifted to `0.1.0` against a `1.0.1`
+  `pyproject.toml`. The value is served by `/health` and by the OpenAPI schema,
+  so a deployed instance was misreporting its own build.
+- `tests/test_health.py` and `tests/e2e/test_api_harness.py` now assert the
+  served version equals the installed version rather than only that the key is
+  present.
 
 ## [1.0.1] - 2026-05-10
 
