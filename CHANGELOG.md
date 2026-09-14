@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Point the shipped project URLs and the README links at the `aiexponent` GitHub org. The org was renamed from `aiexponenthq`, so `pyproject.toml` `Repository`, `Documentation` and `Bug Tracker`, the README CI badge, the clone command, and the two sibling-project links all named an owner that only resolves through a GitHub redirect.
+
 ## [1.0.1] - 2026-05-10
 
 Cleanup release. Closes the three non-blocking items the v1.0.0 sign-off

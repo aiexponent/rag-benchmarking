@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="https://pypi.org/project/rag-benchmarking/"><img src="https://img.shields.io/pypi/v/rag-benchmarking.svg" alt="PyPI"></a>
-  <a href="https://github.com/aiexponenthq/rag-benchmarking/actions"><img src="https://github.com/aiexponenthq/rag-benchmarking/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/aiexponent/rag-benchmarking/actions"><img src="https://github.com/aiexponent/rag-benchmarking/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-0D5463.svg" alt="License: Apache 2.0"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.11%2B-0D5463.svg" alt="Python 3.11+"></a>
   <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689"><img src="https://img.shields.io/badge/EU%20AI%20Act-Article%2015-0D5463.svg" alt="EU AI Act Article 15"></a>
@@ -338,7 +338,7 @@ data/
 See [CONTRIBUTING.md](CONTRIBUTING.md). Issues and PRs welcome.
 
 ```bash
-git clone https://github.com/aiexponenthq/rag-benchmarking
+git clone https://github.com/aiexponent/rag-benchmarking
 cd rag-benchmarking
 pip install -e ".[test]"
 pytest
@@ -355,6 +355,6 @@ Built by [AI Exponent LLC](https://aiexponent.com) — `hello@aiexponent.com`
 ---
 
 *Part of the AiExponent open-source AI governance toolchain:
-[license-compliance-checker](https://github.com/aiexponenthq/license-compliance-checker) ·
+[license-compliance-checker](https://github.com/aiexponent/license-compliance-checker) ·
 **rag-benchmarking** ·
-[RiskForge](https://github.com/aiexponenthq/riskforge)*
+[RiskForge](https://github.com/aiexponent/riskforge)*
