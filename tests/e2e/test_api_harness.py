@@ -1,3 +1,5 @@
+from importlib.metadata import version as installed_version
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -39,6 +41,9 @@ HEADERS = {"X-API-Key": "test-key"}
 def test_health_endpoint(client):
     resp = client.get("/health")
     assert resp.status_code == 200
+    # Presence-only assertions let the served version drift a full major
+    # version behind the package metadata while CI stayed green.
+    assert resp.json()["version"] == installed_version("rag-benchmarking")
 
 
 def test_agent_eval_endpoint_source_attribution(client):
