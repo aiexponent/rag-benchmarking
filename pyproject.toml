@@ -69,11 +69,6 @@ where = ["src"]
 include = ["rag_benchmarking*"]
 exclude = []
 
-[tool.black]
-line-length = 120
-target-version = ["py311"]
-skip-string-normalization = true
-
 [tool.ruff]
 # Bumped from 100 → 120 for v1.0 (audit RB-D9). The pre-existing codebase
 # had 19 E501 lines at 101–130 chars; rather than wrap those mechanically

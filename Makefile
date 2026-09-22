@@ -1,5 +1,5 @@
 help:
-	@echo "Targets: env install run docker-up ingest-sample eval-golden test"
+	@echo "Targets: env install run docker-up ingest-sample eval-golden test lint"
 
 env:
 	conda create -y -n rag_agentic python=3.11
@@ -25,3 +25,8 @@ eval-golden:
 
 test:
 	pytest -q
+
+lint:
+	python -m ruff check src tests
+	python -m ruff format --check src tests
+	python -m mypy src
