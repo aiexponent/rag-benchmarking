@@ -1,6 +1,6 @@
 import pytest
 
-from app.eval.agentic_metrics import source_attribution_accuracy
+from rag_benchmarking.app.eval.agentic_metrics import source_attribution_accuracy
 
 
 def test_perfect_attribution():

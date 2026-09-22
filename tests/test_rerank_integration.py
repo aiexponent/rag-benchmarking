@@ -2,14 +2,14 @@ from __future__ import annotations
 
 from fastapi.testclient import TestClient
 
-from app.main import app
+from rag_benchmarking.app.main import app
 
 
 def test_query_rerank_flag(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     client = TestClient(app)
 
     # Mock retrieval to return out-of-order scores
-    import app.retrieval.service as svc
+    import rag_benchmarking.app.retrieval.service as svc
 
     def fake_retrieve(query: str, top_k: int = 5):  # type: ignore[no-untyped-def]
         return [
@@ -20,7 +20,7 @@ def test_query_rerank_flag(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     monkeypatch.setattr(svc, "retrieve_top_chunks", fake_retrieve)
 
     # Mock reranker to invert order deterministically
-    import app.retrieval.reranker as rr
+    import rag_benchmarking.app.retrieval.reranker as rr
 
     class FakeReranker:
         def rerank(self, query, chunks, top_k):  # type: ignore[no-untyped-def]
@@ -29,7 +29,7 @@ def test_query_rerank_flag(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     monkeypatch.setattr(rr, "CrossEncoderReranker", lambda: FakeReranker())
 
     # Mock LLM
-    import app.llm.client as llm
+    import rag_benchmarking.app.llm.client as llm
 
     class FakeLLM:
         def generate(self, system_prompt: str, user_prompt: str) -> str:  # type: ignore[no-untyped-def]

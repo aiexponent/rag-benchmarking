@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from app.retrieval.embeddings import EmbeddingsClient
+from rag_benchmarking.app.retrieval.embeddings import EmbeddingsClient
 
 
 def test_embeddings_shape_and_dtype() -> None:

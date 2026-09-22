@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import logging
 
-from app.config.settings import get_settings
-from app.logging.json_logger import configure_json_logging
+from rag_benchmarking.app.config.settings import get_settings
+from rag_benchmarking.app.logging.json_logger import configure_json_logging
 
 
 def test_settings_loads_defaults() -> None:

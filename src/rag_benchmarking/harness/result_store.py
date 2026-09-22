@@ -5,7 +5,7 @@ import logging
 import sqlite3
 from pathlib import Path
 
-from harness.schemas import BenchmarkReport
+from rag_benchmarking.harness.schemas import BenchmarkReport
 
 logger = logging.getLogger(__name__)
 

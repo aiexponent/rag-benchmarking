@@ -3,14 +3,14 @@ from unittest import mock
 
 from fastapi.testclient import TestClient
 
-from app.main import app
+from rag_benchmarking.app.main import app
 
 
 def test_api_key_security_open_mode():
     """Test that API is open when API_KEY is not set"""
     with mock.patch.dict(os.environ, {}, clear=True):
         # We need to reload settings because they are lru_cached
-        from app.config.settings import get_settings
+        from rag_benchmarking.app.config.settings import get_settings
 
         get_settings.cache_clear()
 
@@ -23,7 +23,7 @@ def test_api_key_security_open_mode():
 def test_api_key_security_enforced_mode():
     """Test that API requires key when configured"""
     with mock.patch.dict(os.environ, {"API_KEY": "secret-123"}, clear=True):
-        from app.config.settings import get_settings
+        from rag_benchmarking.app.config.settings import get_settings
 
         get_settings.cache_clear()
 
@@ -41,8 +41,8 @@ def test_api_key_security_enforced_mode():
         # We mock the engine to avoid 500
         # 3. Correct key -> 200
         # Use dependency_overrides to mock the engine
-        from app.api.query import get_rag_engine
-        from app.engine.rag_engine import RAGResult
+        from rag_benchmarking.app.api.query import get_rag_engine
+        from rag_benchmarking.app.engine.rag_engine import RAGResult
 
         mock_engine = mock.Mock()
         mock_engine.query.return_value = RAGResult(answer="ok", citations=[], timings={})

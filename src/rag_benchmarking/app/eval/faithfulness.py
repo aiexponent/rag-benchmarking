@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import logging
 
-from app.llm.client import LLMClient
+from rag_benchmarking.app.llm.client import LLMClient
 
 logger = logging.getLogger(__name__)
 

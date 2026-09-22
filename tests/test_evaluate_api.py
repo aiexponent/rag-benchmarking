@@ -2,14 +2,14 @@ from __future__ import annotations
 
 from fastapi.testclient import TestClient
 
-from app.main import app
+from rag_benchmarking.app.main import app
 
 
 def test_evaluate_smoke(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     client = TestClient(app)
 
     # Patch run_evaluation where EvaluationRunner imports it
-    import harness.runner as runner_mod
+    import rag_benchmarking.harness.runner as runner_mod
 
     def fake_run(samples, metrics=None):  # type: ignore[no-untyped-def]
         return {

@@ -3,12 +3,12 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from app.eval.agentic_llm_metrics import (
+from rag_benchmarking.app.eval.agentic_llm_metrics import (
     compute_agent_faithfulness,
     compute_retrieval_necessity,
     compute_tool_call_accuracy,
 )
-from harness.schemas import AgentTrace, ReasoningStep, RetrievedChunk, ToolCall
+from rag_benchmarking.harness.schemas import AgentTrace, ReasoningStep, RetrievedChunk, ToolCall
 
 
 def make_trace():
@@ -86,7 +86,10 @@ def _mock_llm(response: str):
 
 def test_agent_faithfulness_full():
     trace = make_trace()
-    with patch("app.eval.agentic_llm_metrics.LLMClient", return_value=_mock_llm(MOCK_FAITHFUL_RESPONSE)):
+    with patch(
+        "rag_benchmarking.app.eval.agentic_llm_metrics.LLMClient",
+        return_value=_mock_llm(MOCK_FAITHFUL_RESPONSE),
+    ):
         result = compute_agent_faithfulness(trace)
     assert result["score"] == pytest.approx(1.0)
     assert result["worst_step"] == 0
@@ -98,7 +101,10 @@ def test_agent_faithfulness_no_steps_returns_neutral():
         question="Q?",
         final_answer="A.",
     )
-    with patch("app.eval.agentic_llm_metrics.LLMClient", return_value=_mock_llm(MOCK_FAITHFUL_RESPONSE)):
+    with patch(
+        "rag_benchmarking.app.eval.agentic_llm_metrics.LLMClient",
+        return_value=_mock_llm(MOCK_FAITHFUL_RESPONSE),
+    ):
         result = compute_agent_faithfulness(trace)
     # No steps → no reasoning to evaluate → neutral 1.0
     assert result["score"] == pytest.approx(1.0)
@@ -106,7 +112,7 @@ def test_agent_faithfulness_no_steps_returns_neutral():
 
 def test_tool_call_accuracy_full():
     trace = make_trace()
-    with patch("app.eval.agentic_llm_metrics.LLMClient", return_value=_mock_llm(MOCK_TOOL_RESPONSE)):
+    with patch("rag_benchmarking.app.eval.agentic_llm_metrics.LLMClient", return_value=_mock_llm(MOCK_TOOL_RESPONSE)):
         result = compute_tool_call_accuracy(trace)
     assert result["score"] == pytest.approx(1.0)
     assert len(result["tool_evaluations"]) == 1
@@ -114,14 +120,17 @@ def test_tool_call_accuracy_full():
 
 def test_tool_call_accuracy_no_calls_returns_perfect():
     trace = AgentTrace(question="Q?", final_answer="A.")
-    with patch("app.eval.agentic_llm_metrics.LLMClient", return_value=_mock_llm(MOCK_TOOL_RESPONSE)):
+    with patch("rag_benchmarking.app.eval.agentic_llm_metrics.LLMClient", return_value=_mock_llm(MOCK_TOOL_RESPONSE)):
         result = compute_tool_call_accuracy(trace)
     assert result["score"] == pytest.approx(1.0)
     assert result["tool_evaluations"] == []
 
 
 def test_retrieval_necessity_essential():
-    with patch("app.eval.agentic_llm_metrics.LLMClient", return_value=_mock_llm(MOCK_NECESSITY_RESPONSE)):
+    with patch(
+        "rag_benchmarking.app.eval.agentic_llm_metrics.LLMClient",
+        return_value=_mock_llm(MOCK_NECESSITY_RESPONSE),
+    ):
         result = compute_retrieval_necessity(
             question="What is the 2025 deadline?",
             answer="August 2025.",
@@ -133,6 +142,6 @@ def test_retrieval_necessity_essential():
 
 def test_faithfulness_malformed_response_returns_zero():
     trace = make_trace()
-    with patch("app.eval.agentic_llm_metrics.LLMClient", return_value=_mock_llm("not json")):
+    with patch("rag_benchmarking.app.eval.agentic_llm_metrics.LLMClient", return_value=_mock_llm("not json")):
         result = compute_agent_faithfulness(trace)
     assert result["score"] == pytest.approx(0.0)

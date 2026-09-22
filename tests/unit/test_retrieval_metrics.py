@@ -1,4 +1,4 @@
-from app.eval.retrieval_metrics import mean_reciprocal_rank, ndcg_at_k, precision_at_k, recall_at_k
+from rag_benchmarking.app.eval.retrieval_metrics import mean_reciprocal_rank, ndcg_at_k, precision_at_k, recall_at_k
 
 
 def test_precision_at_k_perfect():

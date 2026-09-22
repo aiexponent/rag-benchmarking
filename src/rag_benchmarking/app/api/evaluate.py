@@ -8,10 +8,10 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
-from app.api.security import get_api_key
-from app.eval.reporting import write_report_files
-from app.eval.result_store import ResultStore
-from harness.schemas import AgentTrace
+from rag_benchmarking.app.api.security import get_api_key
+from rag_benchmarking.app.eval.reporting import write_report_files
+from rag_benchmarking.app.eval.result_store import ResultStore
+from rag_benchmarking.harness.schemas import AgentTrace
 
 router = APIRouter(prefix="/v1", tags=["evaluate"])
 
@@ -44,9 +44,9 @@ async def post_evaluate(req: EvalRequest, _: str | None = Depends(get_api_key)) 
     RAGAS calls are offloaded to a thread-pool executor to avoid blocking
     the FastAPI event loop.
     """
-    from harness.runner import EvaluationRunner
-    from harness.schemas import EvalSample as HarnessEvalSample
-    from harness.schemas import RunConfig
+    from rag_benchmarking.harness.runner import EvaluationRunner
+    from rag_benchmarking.harness.schemas import EvalSample as HarnessEvalSample
+    from rag_benchmarking.harness.schemas import RunConfig
 
     loop = asyncio.get_running_loop()
     try:
@@ -104,12 +104,12 @@ async def post_evaluate_agent(
     """Evaluate an agentic RAG trace using agentic-specific metrics."""
     import re
 
-    from app.eval.agentic_llm_metrics import (
+    from rag_benchmarking.app.eval.agentic_llm_metrics import (
         compute_agent_faithfulness,
         compute_retrieval_necessity,
         compute_tool_call_accuracy,
     )
-    from app.eval.agentic_metrics import source_attribution_accuracy
+    from rag_benchmarking.app.eval.agentic_metrics import source_attribution_accuracy
 
     scores: dict[str, float] = {}
     details: dict[str, Any] = {}
