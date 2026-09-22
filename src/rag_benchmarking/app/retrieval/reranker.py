@@ -5,7 +5,7 @@ from typing import Any
 try:
     from FlagEmbedding import FlagReranker
 except Exception:  # pragma: no cover - optional dependency during import
-    FlagReranker = None  # type: ignore[assignment]
+    FlagReranker = None
 
 
 class CrossEncoderReranker:

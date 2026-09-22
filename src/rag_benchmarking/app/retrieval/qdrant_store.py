@@ -69,7 +69,7 @@ def _resolve_vector_schema(client: QdrantClient, collection: str) -> tuple[bool,
     Avoid direct isinstance checks on typing-based classes to prevent TypeErrors.
     """
     info = client.get_collection(collection)
-    vectors_cfg = info.config.params.vectors  # type: ignore[attr-defined]
+    vectors_cfg = info.config.params.vectors
 
     # Case 1: single vector config typically has attribute 'size'
     if hasattr(vectors_cfg, "size"):
@@ -92,7 +92,7 @@ def _resolve_vector_schema(client: QdrantClient, collection: str) -> tuple[bool,
 def _detect_named_vector_from_dump(client: QdrantClient, collection: str) -> str | None:
     """Fallback: inspect raw model dump to extract a named vector key if present."""
     info = client.get_collection(collection)
-    data = info.model_dump(exclude_none=True)  # type: ignore[attr-defined]
+    data = info.model_dump(exclude_none=True)
     vectors = data.get("config", {}).get("params", {}).get("vectors") if isinstance(data, dict) else None
     if isinstance(vectors, dict):
         if "size" in vectors:
@@ -140,7 +140,7 @@ def search(
     vector_name: str | None = None,
 ) -> list[qmodels.ScoredPoint]:
     qv: Any = (vector_name, query_vector.tolist()) if vector_name else query_vector.tolist()
-    return client.search(
+    return client.search(  # type: ignore[attr-defined]
         collection_name=collection,
         query_vector=qv,
         limit=top_k,

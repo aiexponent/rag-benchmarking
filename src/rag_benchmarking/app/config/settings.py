@@ -69,4 +69,4 @@ def get_settings() -> AppSettings:
         Loaded settings object.
     """
 
-    return AppSettings()  # type: ignore[call-arg]
+    return AppSettings()

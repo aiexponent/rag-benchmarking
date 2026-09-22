@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
+from typing import Any
 
 import requests
 
@@ -104,7 +105,7 @@ class LLMClient:
             "Authorization": f"Bearer {self.openai_api_key}",
             "Content-Type": "application/json",
         }
-        payload = {
+        payload: dict[str, Any] = {
             "model": self.openai_model,
             "temperature": self.temperature,
             "max_tokens": self.max_tokens,
@@ -144,7 +145,7 @@ class LLMClient:
             {"role": "user", "parts": [{"text": system_prompt}]},
             {"role": "user", "parts": [{"text": user_prompt}]},
         ]
-        payload = {
+        payload: dict[str, Any] = {
             "contents": contents,
             "generationConfig": {
                 "temperature": self.temperature,

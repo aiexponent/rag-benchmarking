@@ -34,8 +34,8 @@ jobs:
       - name: Format (ruff format --check)
         run: python -m ruff format --check src tests
 
-      - name: Type check (mypy, non-blocking for v1.0)
-        run: python -m mypy src || true
+      - name: Type check (mypy)
+        run: python -m mypy src
 
       - name: Unit tests
         run: python -m pytest tests/unit/ -v
@@ -58,8 +58,26 @@ jobs:
           cache: pip
 
       - name: Install dependencies
-        run: pip install -e ".[test]"
+        run: |
+          python -m pip install --upgrade pip setuptools
+          pip install -e ".[test]"
 
-      - name: pip audit
-        run: pip install pip-audit && pip-audit --desc
-        continue-on-error: true
+      - name: Install security tools
+        run: pip install pip-audit
+
+      - name: Dependency vulnerability audit
+        # Advisories waived below are ones rag-benchmarking is verified not exposed to and that
+        # cannot or need not be fixed upstream yet. Re-audit each on any dependency bump.
+        #  PYSEC-2026-3447 (setuptools, CVE-2026-59890): MANIFEST.in exclusion bypass. Not exposed at runtime.
+        #  PYSEC-2026-76 (langchain-openai, CVE-2026-21840): SSRF in _url_to_size token counting for images.
+        #    rag-benchmarking does not invoke image token counting.
+        #  PYSEC-2026-2447 (diskcache, CVE-2026-2447): Pickle deserialization in cache directory.
+        #    rag-benchmarking operates in isolated runtime without external cache writes.
+        #  PYSEC-2026-3046 (ragas): SSRF in multi_modal_faithfulness when processing retrieved file URLs.
+        #    rag-benchmarking only runs text evaluation and does not invoke multi_modal_faithfulness.
+        run: |
+          pip-audit --desc \
+            --ignore-vuln PYSEC-2026-3447 \
+            --ignore-vuln PYSEC-2026-76 \
+            --ignore-vuln PYSEC-2026-2447 \
+            --ignore-vuln PYSEC-2026-3046

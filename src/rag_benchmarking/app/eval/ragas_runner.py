@@ -44,7 +44,7 @@ def run_evaluation(
     import os
 
     from ragas import evaluate
-    from ragas.dataset_schema import EvaluationDataset, SingleTurnSample
+    from ragas.dataset_schema import EvaluationDataset, MultiTurnSample, SingleTurnSample
     from ragas.metrics._answer_relevance import AnswerRelevancy
     from ragas.metrics._context_precision import LLMContextPrecisionWithReference
     from ragas.metrics._context_recall import LLMContextRecall
@@ -83,7 +83,7 @@ def run_evaluation(
     # Translate legacy field names to SingleTurnSample field names.
     # SingleTurnSample accepted fields (ragas 0.4.x):
     #   user_input, retrieved_contexts, response, reference
-    ragas_samples: list[SingleTurnSample] = []
+    ragas_samples: list[SingleTurnSample | MultiTurnSample] = []
     for s in samples:
         ground_truth_list: list[str] = s.get("ground_truths") or []
         reference: str | None = s.get("reference") or (ground_truth_list[0] if ground_truth_list else None)
@@ -157,29 +157,33 @@ def run_evaluation(
     _logger = _logging.getLogger(__name__)
 
     try:
-        df = result.to_pandas()
+        to_pandas = getattr(result, "to_pandas", None)
+        if callable(to_pandas):
+            df = to_pandas()
+        else:
+            raise AttributeError("RAGAS result has no to_pandas method")
     except Exception as exc:
         _logger.warning("RAGAS result.to_pandas() failed: %s — trying scores dict", exc)
         # Fallback: try to read scores directly from the result object
         scores = getattr(result, "scores", {}) or {}
-        aggregates = {m: float(scores.get(m, float("nan"))) for m in selected}
-        per_sample = {}
+        fallback_aggregates: dict[str, float] = {m: float(scores.get(m, float("nan"))) for m in selected}
+        fallback_per_sample: dict[str, list[float]] = {}
         skipped = [m for m in all_requested if m not in selected]
         return {
-            "metrics": {k: (None if _math.isnan(v) else v) for k, v in aggregates.items()},
-            "per_sample": per_sample,
+            "metrics": {k: (None if _math.isnan(v) else v) for k, v in fallback_aggregates.items()},
+            "per_sample": fallback_per_sample,
             "skipped_metrics": skipped,
             "skip_reason": None,
         }
 
-    aggregates: dict[str, float] = {}
+    aggregates: dict[str, float | None] = {}
     per_sample: dict[str, list[float]] = {}
     for m in selected:
         if m in df.columns:
             vals = df[m].dropna().tolist()
             mean_val = float(df[m].mean()) if vals else float("nan")
             # Replace NaN with None so JSON serialises cleanly (NaN → null → None)
-            aggregates[m] = mean_val if not _math.isnan(mean_val) else None  # type: ignore[assignment]
+            aggregates[m] = mean_val if not _math.isnan(mean_val) else None
             per_sample[m] = [float(v) for v in vals]
 
     skipped = [m for m in all_requested if m not in selected]

@@ -7,6 +7,8 @@ from typing import Any
 
 from fastapi import Depends, FastAPI, Request
 from fastapi.responses import JSONResponse
+from starlette.middleware.base import RequestResponseEndpoint
+from starlette.responses import Response
 
 from rag_benchmarking import __version__
 from rag_benchmarking.app.api.evaluate import router as eval_router
@@ -22,7 +24,7 @@ app.include_router(eval_router, dependencies=[Depends(get_api_key)])
 
 
 @app.middleware("http")
-async def trace_middleware(request: Request, call_next):
+async def trace_middleware(request: Request, call_next: RequestResponseEndpoint) -> Response:
     trace_id = request.headers.get("X-Trace-Id") or str(uuid.uuid4())
     trace_id_var.set(trace_id)
     response = await call_next(request)
@@ -31,7 +33,7 @@ async def trace_middleware(request: Request, call_next):
 
 
 @app.exception_handler(VectorDBError)
-async def vector_db_error_handler(request: Request, exc: VectorDBError):
+async def vector_db_error_handler(request: Request, exc: VectorDBError) -> JSONResponse:
     return JSONResponse(
         status_code=503,
         content={"detail": "Vector Database Service Unavailable", "error": str(exc)},
@@ -39,7 +41,7 @@ async def vector_db_error_handler(request: Request, exc: VectorDBError):
 
 
 @app.exception_handler(LLMError)
-async def llm_error_handler(request: Request, exc: LLMError):
+async def llm_error_handler(request: Request, exc: LLMError) -> JSONResponse:
     return JSONResponse(
         status_code=503,
         content={"detail": "LLM Service Unavailable", "error": str(exc)},
@@ -47,7 +49,7 @@ async def llm_error_handler(request: Request, exc: LLMError):
 
 
 @app.exception_handler(RAGException)
-async def rag_exception_handler(request: Request, exc: RAGException):
+async def rag_exception_handler(request: Request, exc: RAGException) -> JSONResponse:
     return JSONResponse(
         status_code=500,
         content={"detail": "Internal RAG Error", "error": str(exc)},
