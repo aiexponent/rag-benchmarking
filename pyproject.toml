@@ -97,7 +97,6 @@ ignore = [
 known-first-party = ["rag_benchmarking"]
 
 [tool.mypy]
-python_version = "3.11"
 warn_unused_configs = true
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
