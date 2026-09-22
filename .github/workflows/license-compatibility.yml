@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   lcc-scan:
-    name: LCC self-scan (warn-only)
+    name: LCC self-scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -33,7 +33,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install license-compliance-checker
 
-      - name: Run LCC scan (permissive policy, warn-only)
+      - name: Run LCC scan (permissive policy)
         run: |
           lcc scan . \
             --format json \
@@ -43,7 +43,8 @@ jobs:
             --exclude ".git/**" \
             --exclude "dist/**" \
             --exclude "build/**" \
-            || true
+            --exclude ".venv/**" \
+            --exclude "venv/**"
 
       - name: Upload LCC report
         if: always()
@@ -67,7 +68,8 @@ jobs:
           violations = summary.get("violations", 0)
           components = summary.get("component_count", 0)
           if violations:
-              print(f"::warning::LCC found {violations} license violation(s) across {components} components.")
+              print(f"::error::LCC found {violations} license violation(s) across {components} components.")
+              sys.exit(1)
           else:
               print(f"LCC scan clean: {components} components, 0 violations.")
           PY

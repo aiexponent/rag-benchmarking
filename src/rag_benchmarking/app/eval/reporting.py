@@ -6,7 +6,7 @@ from typing import Any
 
 
 def generate_markdown_report(result: dict[str, Any], title: str = "RAG Evaluation Report") -> str:
-    metrics: dict[str, float] = result.get("metrics", {})  # type: ignore[assignment]
+    metrics: dict[str, float] = result.get("metrics", {})
     lines = [f"# {title}", "", "## Metrics", "", "| Metric | Score |", "|---|---:|"]
     for name, value in metrics.items():
         lines.append(f"| {name} | {value:.3f} |")
