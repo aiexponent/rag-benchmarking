@@ -8,13 +8,13 @@ from typing import Any
 from fastapi import Depends, FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from app import __version__
-from app.api.evaluate import router as eval_router
-from app.api.query import router as query_router
-from app.api.security import get_api_key
-from app.config.settings import get_settings
-from app.exceptions import LLMError, RAGException, VectorDBError
-from app.logging.json_logger import configure_json_logging, trace_id_var
+from rag_benchmarking import __version__
+from rag_benchmarking.app.api.evaluate import router as eval_router
+from rag_benchmarking.app.api.query import router as query_router
+from rag_benchmarking.app.api.security import get_api_key
+from rag_benchmarking.app.config.settings import get_settings
+from rag_benchmarking.app.exceptions import LLMError, RAGException, VectorDBError
+from rag_benchmarking.app.logging.json_logger import configure_json_logging, trace_id_var
 
 app = FastAPI(title="Agentic RAG Benchmarking POC", version=__version__)
 app.include_router(query_router, dependencies=[Depends(get_api_key)])

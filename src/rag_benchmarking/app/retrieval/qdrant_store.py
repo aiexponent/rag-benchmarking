@@ -6,7 +6,7 @@ import numpy as np
 from qdrant_client import QdrantClient
 from qdrant_client.http import models as qmodels
 
-from app.config.settings import get_settings
+from rag_benchmarking.app.config.settings import get_settings
 
 
 def get_qdrant_client() -> QdrantClient:

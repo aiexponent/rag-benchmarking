@@ -1,7 +1,7 @@
 from fastapi import HTTPException, Security, status
 from fastapi.security import APIKeyHeader
 
-from app.config.settings import get_settings
+from rag_benchmarking.app.config.settings import get_settings
 
 api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
 

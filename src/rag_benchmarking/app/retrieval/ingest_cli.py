@@ -3,10 +3,10 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from app.config.settings import get_settings
-from app.retrieval.chunking import TextChunk, recursive_character_chunk
-from app.retrieval.embeddings import EmbeddingsClient
-from app.retrieval.qdrant_store import ensure_collection, get_qdrant_client, upsert_points
+from rag_benchmarking.app.config.settings import get_settings
+from rag_benchmarking.app.retrieval.chunking import TextChunk, recursive_character_chunk
+from rag_benchmarking.app.retrieval.embeddings import EmbeddingsClient
+from rag_benchmarking.app.retrieval.qdrant_store import ensure_collection, get_qdrant_client, upsert_points
 
 
 def read_text_file(path: Path) -> str:

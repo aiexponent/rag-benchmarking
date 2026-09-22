@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from app.retrieval.chunking import recursive_character_chunk
+from rag_benchmarking.app.retrieval.chunking import recursive_character_chunk
 
 
 def test_chunk_boundaries_and_overlap() -> None:

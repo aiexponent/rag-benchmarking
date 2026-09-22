@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 
 import requests
 
-from app.config.settings import get_settings
+from rag_benchmarking.app.config.settings import get_settings
 
 
 @dataclass
@@ -129,7 +129,7 @@ class LLMClient:
             )
             return LLMResponse(text=text, token_usage=token_usage)
         except Exception as e:
-            from app.exceptions import LLMError
+            from rag_benchmarking.app.exceptions import LLMError
 
             raise LLMError(f"OpenAI API error: {str(e)}") from e
 
@@ -173,6 +173,6 @@ class LLMClient:
             )
             return LLMResponse(text=text, token_usage=token_usage)
         except Exception as e:
-            from app.exceptions import LLMError
+            from rag_benchmarking.app.exceptions import LLMError
 
             raise LLMError(f"Gemini API error: {str(e)}") from e

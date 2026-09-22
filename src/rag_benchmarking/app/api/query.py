@@ -6,7 +6,7 @@ import functools
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
-from app.engine.rag_engine import RAGEngine, RetrievedChunk
+from rag_benchmarking.app.engine.rag_engine import RAGEngine, RetrievedChunk
 
 router = APIRouter(prefix="/v1", tags=["query"])
 

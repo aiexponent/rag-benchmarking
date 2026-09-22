@@ -24,14 +24,14 @@ def disable_api_key_enforcement(monkeypatch):
     monkeypatch.setenv("API_KEY", "")
 
     # Clear the lru_cache so AppSettings re-reads from environment
-    from app.config.settings import get_settings
+    from rag_benchmarking.app.config.settings import get_settings
 
     get_settings.cache_clear()
 
     # Patch AppSettings to not read .env file during tests
     from pydantic_settings import SettingsConfigDict
 
-    from app.config import settings as settings_module
+    from rag_benchmarking.app.config import settings as settings_module
 
     original_config = settings_module.AppSettings.model_config
     settings_module.AppSettings.model_config = SettingsConfigDict(

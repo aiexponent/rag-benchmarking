@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, patch
 
-from app.sdk.client import RagEval
+from rag_benchmarking.app.sdk.client import RagEval
 
 
 def test_sdk_evaluate_list_of_dicts():
@@ -13,7 +13,7 @@ def test_sdk_evaluate_list_of_dicts():
             "answer": "RAG combines retrieval with generation.",
         }
     ]
-    with patch("app.sdk.client.requests.post") as mock_post:
+    with patch("rag_benchmarking.app.sdk.client.requests.post") as mock_post:
         mock_post.return_value.status_code = 200
         mock_post.return_value.json.return_value = {
             "metrics": {"faithfulness": 0.9},
@@ -68,7 +68,7 @@ def test_sdk_from_llamaindex_style():
 def test_sdk_list_runs():
     """list_runs makes GET /v1/runs."""
     client = RagEval(api_url="http://localhost:5001", api_key="test")
-    with patch("app.sdk.client.requests.get") as mock_get:
+    with patch("rag_benchmarking.app.sdk.client.requests.get") as mock_get:
         mock_get.return_value.json.return_value = [{"run_id": "r1", "n_samples": 5}]
         mock_get.return_value.raise_for_status = MagicMock()
         runs = client.list_runs()

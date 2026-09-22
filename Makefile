@@ -11,13 +11,13 @@ install:
 	python -m pip install -e .
 
 run:
-	uvicorn app.main:app --host 0.0.0.0 --port 5000
+	uvicorn rag_benchmarking.app.main:app --host 0.0.0.0 --port 5000
 
 docker-up:
 	HOST_PORT=5001 docker compose up -d
 
 ingest-sample:
-	python -m app.retrieval.ingest_cli data/sample/guide.md
+	python -m rag_benchmarking.app.retrieval.ingest_cli data/sample/guide.md
 
 eval-golden:
 	set -a && source .env && set +a && \

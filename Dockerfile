@@ -22,6 +22,6 @@ EXPOSE 5000
 
 HEALTHCHECK --interval=30s --timeout=3s --retries=3 CMD curl -fsS http://localhost:5000/health || exit 1
 
-CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5000"]
+CMD ["python", "-m", "uvicorn", "rag_benchmarking.app.main:app", "--host", "0.0.0.0", "--port", "5000"]
 
 

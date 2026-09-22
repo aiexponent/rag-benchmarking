@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from harness.result_store import ResultStore
-from harness.schemas import BenchmarkReport
+from rag_benchmarking.harness.result_store import ResultStore
+from rag_benchmarking.harness.schemas import BenchmarkReport
 
 
 @pytest.fixture

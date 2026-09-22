@@ -2,8 +2,8 @@ from unittest.mock import patch
 
 import pytest
 
-from harness.runner import EvaluationRunner
-from harness.schemas import BenchmarkReport, EvalSample, RunConfig
+from rag_benchmarking.harness.runner import EvaluationRunner
+from rag_benchmarking.harness.schemas import BenchmarkReport, EvalSample, RunConfig
 
 
 @pytest.fixture
@@ -35,7 +35,7 @@ def test_runner_returns_benchmark_report(samples):
         "skip_reason": None,
     }
 
-    with patch("harness.runner.run_evaluation", return_value=mock_ragas_result):
+    with patch("rag_benchmarking.harness.runner.run_evaluation", return_value=mock_ragas_result):
         report = runner.evaluate(samples)
 
     assert isinstance(report, BenchmarkReport)
@@ -69,7 +69,7 @@ def test_runner_skips_context_precision_without_ground_truths():
         "skip_reason": "ground_truths not provided",
     }
 
-    with patch("harness.runner.run_evaluation", return_value=mock_ragas_result):
+    with patch("rag_benchmarking.harness.runner.run_evaluation", return_value=mock_ragas_result):
         report = runner.evaluate(samples_no_gt)
 
     assert "context_precision" in report.skipped_metrics
@@ -86,7 +86,7 @@ def test_runner_generates_run_id(samples):
         "skip_reason": None,
     }
 
-    with patch("harness.runner.run_evaluation", return_value=mock_ragas_result):
+    with patch("rag_benchmarking.harness.runner.run_evaluation", return_value=mock_ragas_result):
         report = runner.evaluate(samples)
 
     assert report.run_id is not None

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from app.eval.faithfulness import compute_faithfulness
+from rag_benchmarking.app.eval.faithfulness import compute_faithfulness
 
 
 def compute_groundedness(answer: str, contexts: list[str]) -> float:

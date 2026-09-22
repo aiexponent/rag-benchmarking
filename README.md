@@ -31,7 +31,7 @@ pip install rag-benchmarking
 ```
 
 ```python
-from app.sdk.client import RagEval
+from rag_benchmarking import RagEval
 
 client = RagEval(api_url="http://localhost:5001", api_key="your-key")
 
@@ -65,8 +65,8 @@ docker compose up
 graph TD
     RAG["Your RAG System\nLangChain · LlamaIndex · Custom"]
     SDK["SDK Adapters\nRagEval.from_langchain()\nRagEval.from_llamaindex()"]
-    SCHEMA["EvalSample / AgentTrace\nharness/schemas.py"]
-    RUNNER["EvaluationRunner\nharness/runner.py"]
+    SCHEMA["EvalSample / AgentTrace\nrag_benchmarking/harness/schemas.py"]
+    RUNNER["EvaluationRunner\nrag_benchmarking/harness/runner.py"]
 
     CLASSIC["Classic Metrics\nfaithfulness · answer_relevancy\ncontext_precision · context_recall"]
     RETRIEVAL["Retrieval Metrics\nPrecision@K · Recall@K\nMRR · NDCG"]
@@ -308,15 +308,21 @@ ENFORCE_API_KEY=true
 
 ```
 src/
-  harness/            # Framework-agnostic evaluation harness
-    schemas.py        # EvalSample, AgentTrace, BenchmarkReport
-    protocol.py       # RAGEvaluable Protocol — the plug-in contract
-    runner.py         # EvaluationRunner — orchestrates metrics
-    result_store.py   # SQLite persistence
-  app/
-    api/              # FastAPI endpoints
-    eval/             # Metric implementations
-    sdk/              # Python SDK (RagEval client)
+  rag_benchmarking/
+    __init__.py       # Public entrypoints (RagEval, EvaluationRunner, ResultStore, ...)
+    sdk/              # rag_benchmarking.sdk entrypoint
+    harness/          # Framework-agnostic evaluation harness
+      schemas.py      # EvalSample, AgentTrace, BenchmarkReport
+      protocol.py     # RAGEvaluable Protocol — the plug-in contract
+      runner.py       # EvaluationRunner — orchestrates metrics
+      result_store.py # SQLite persistence
+    app/
+      api/            # FastAPI endpoints
+      eval/           # Metric implementations
+      retrieval/      # Embeddings, chunking, Qdrant store, reranker
+      engine/         # RAGEngine
+      llm/            # LLM client
+      config/         # Settings
 data/
   golden/qa.jsonl     # 50-sample golden dataset (10 domains)
 ```

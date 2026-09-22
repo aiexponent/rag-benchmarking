@@ -20,8 +20,8 @@ from unittest.mock import MagicMock, patch
 import pytest
 from fastapi.testclient import TestClient
 
-from app.eval.result_store import ResultStore
-from app.main import app
+from rag_benchmarking.app.eval.result_store import ResultStore
+from rag_benchmarking.app.main import app
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -204,7 +204,7 @@ class TestRagasRunner:
 
         import pandas as pd
 
-        from app.eval import ragas_runner as rr
+        from rag_benchmarking.app.eval import ragas_runner as rr
 
         os.environ.setdefault("GEMINI_API_KEY", "test-key")
 
@@ -229,7 +229,7 @@ class TestRagasRunner:
 
         import pandas as pd
 
-        from app.eval import ragas_runner as rr
+        from rag_benchmarking.app.eval import ragas_runner as rr
 
         os.environ.setdefault("GEMINI_API_KEY", "test-key")
 
@@ -260,7 +260,7 @@ class TestRagasRunner:
         """RuntimeError raised when GEMINI_API_KEY is absent."""
         import os
 
-        from app.eval import ragas_runner as rr
+        from rag_benchmarking.app.eval import ragas_runner as rr
 
         saved = os.environ.pop("GEMINI_API_KEY", None)
         try:
@@ -276,7 +276,7 @@ class TestRagasRunner:
 
         import pandas as pd
 
-        from app.eval import ragas_runner as rr
+        from rag_benchmarking.app.eval import ragas_runner as rr
 
         os.environ.setdefault("GEMINI_API_KEY", "test-key")
         captured_dataset: list[Any] = []
@@ -311,7 +311,7 @@ class TestEvaluateEndpoint:
         monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         # Patch run_evaluation where EvaluationRunner imports it
-        import harness.runner as runner_mod
+        import rag_benchmarking.harness.runner as runner_mod
 
         def fake_run(samples: Any, metrics: Any = None) -> dict[str, Any]:
             return {
@@ -346,7 +346,7 @@ class TestEvaluateEndpoint:
         monkeypatch: pytest.MonkeyPatch,
         golden_samples: list[dict[str, Any]],
     ) -> None:
-        import harness.runner as runner_mod
+        import rag_benchmarking.harness.runner as runner_mod
 
         received: list[Any] = []
 
@@ -381,7 +381,7 @@ class TestEvaluateEndpoint:
         api_client: TestClient,
         monkeypatch: pytest.MonkeyPatch,
     ) -> None:
-        import harness.runner as runner_mod
+        import rag_benchmarking.harness.runner as runner_mod
 
         def boom(samples: Any, metrics: Any = None) -> dict[str, Any]:
             raise RuntimeError("GEMINI_API_KEY is required")

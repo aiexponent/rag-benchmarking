@@ -3,7 +3,7 @@ import uuid
 import pytest
 from pydantic import ValidationError
 
-from harness.schemas import (
+from rag_benchmarking.harness.schemas import (
     AgentTrace,
     BenchmarkReport,
     EvalSample,

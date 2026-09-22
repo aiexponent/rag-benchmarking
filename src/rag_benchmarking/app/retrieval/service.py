@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from typing import Any
 
-from app.config.settings import get_settings
-from app.retrieval.embeddings import EmbeddingsClient
-from app.retrieval.qdrant_store import (
+from rag_benchmarking.app.config.settings import get_settings
+from rag_benchmarking.app.retrieval.embeddings import EmbeddingsClient
+from rag_benchmarking.app.retrieval.qdrant_store import (
     get_qdrant_client,
 )
-from app.retrieval.qdrant_store import (
+from rag_benchmarking.app.retrieval.qdrant_store import (
     search as qdrant_search,
 )
 
@@ -44,7 +44,7 @@ def retrieve_top_chunks(query: str, top_k: int = 5) -> list[dict[str, Any]]:
     try:
         results = qdrant_search(client, collection, qvec, top_k=top_k, vector_name=vector_name)
     except Exception as e:
-        from app.exceptions import VectorDBError
+        from rag_benchmarking.app.exceptions import VectorDBError
 
         raise VectorDBError(f"Qdrant search failed: {str(e)}") from e
     payloads: list[dict[str, Any]] = []

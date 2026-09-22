@@ -5,10 +5,10 @@ from typing import Any
 
 from pydantic import BaseModel
 
-import app.llm.client as llm_client
-import app.retrieval.service as retrieval_service
-from app.config.settings import get_settings
-from app.utils.timing import timer
+import rag_benchmarking.app.llm.client as llm_client
+import rag_benchmarking.app.retrieval.service as retrieval_service
+from rag_benchmarking.app.config.settings import get_settings
+from rag_benchmarking.app.utils.timing import timer
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +54,7 @@ class RAGEngine:
         # 2. Rerank
         if rerank:
             try:
-                from app.retrieval.reranker import CrossEncoderReranker
+                from rag_benchmarking.app.retrieval.reranker import CrossEncoderReranker
 
                 with timer() as t_rr:
                     reranker = CrossEncoderReranker()
@@ -73,7 +73,7 @@ class RAGEngine:
         # 4. Self-Check
         groundedness = None
         try:
-            from app.quality.self_check import compute_groundedness
+            from rag_benchmarking.app.quality.self_check import compute_groundedness
 
             with timer() as t_sc:
                 groundedness = compute_groundedness(answer, [c.get("text", "") for c in current_chunks])
@@ -139,7 +139,7 @@ class RAGEngine:
 
         if rerank:
             try:
-                from app.retrieval.reranker import CrossEncoderReranker
+                from rag_benchmarking.app.retrieval.reranker import CrossEncoderReranker
 
                 with timer() as t_rr:
                     reranker = CrossEncoderReranker()
@@ -158,7 +158,7 @@ class RAGEngine:
         # Check
         groundedness = None
         try:
-            from app.quality.self_check import compute_groundedness
+            from rag_benchmarking.app.quality.self_check import compute_groundedness
 
             with timer() as t_sc:
                 groundedness = compute_groundedness(answer, [c.get("text", "") for c in more_chunks])

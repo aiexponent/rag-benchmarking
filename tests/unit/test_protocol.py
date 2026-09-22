@@ -1,6 +1,6 @@
 import pytest
 
-from harness.protocol import RAGEvaluable, validate_evaluable
+from rag_benchmarking.harness.protocol import RAGEvaluable, validate_evaluable
 
 
 class MockRAG:

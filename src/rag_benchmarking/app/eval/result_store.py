@@ -26,7 +26,7 @@ metrics
 
 Usage
 -----
-    from app.eval.result_store import ResultStore
+    from rag_benchmarking.app.eval.result_store import ResultStore
 
     store = ResultStore()          # default: ./eval_results.db
     store.save_run(run_id, result, samples)

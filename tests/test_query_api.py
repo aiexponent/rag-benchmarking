@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from fastapi.testclient import TestClient
 
-from app.main import app
+from rag_benchmarking.app.main import app
 
 
 def test_query_validation() -> None:
@@ -20,12 +20,12 @@ def test_query_smoke(monkeypatch) -> None:  # type: ignore[no-untyped-def]
         ]
 
     # Monkeypatch the service function used by the router
-    import app.retrieval.service as svc
+    import rag_benchmarking.app.retrieval.service as svc
 
     monkeypatch.setattr(svc, "retrieve_top_chunks", fake_retrieve_top_chunks)
 
     # Also patch LLM client to avoid external calls
-    import app.llm.client as llm
+    import rag_benchmarking.app.llm.client as llm
 
     class FakeLLM:
         def generate(self, system_prompt: str, user_prompt: str) -> str:  # type: ignore[no-untyped-def]

@@ -4,7 +4,7 @@ import logging
 import uuid
 from datetime import UTC, datetime
 
-from harness.schemas import (
+from rag_benchmarking.harness.schemas import (
     METRIC_GROUPS,
     BenchmarkReport,
     EvalResult,
@@ -15,7 +15,7 @@ from harness.schemas import (
 logger = logging.getLogger(__name__)
 
 try:
-    from app.eval.ragas_runner import run_evaluation
+    from rag_benchmarking.app.eval.ragas_runner import run_evaluation
 except ImportError:  # pragma: no cover
     run_evaluation = None  # type: ignore[assignment]
 
@@ -98,7 +98,7 @@ class EvaluationRunner:
             if m == "source_attribution_accuracy":
                 import re
 
-                from app.eval.agentic_metrics import source_attribution_accuracy
+                from rag_benchmarking.app.eval.agentic_metrics import source_attribution_accuracy
 
                 scores = []
                 for s in samples:
@@ -108,7 +108,7 @@ class EvaluationRunner:
                 aggregate[m] = sum(scores) / len(scores) if scores else 1.0
                 per_sample_scores[m] = scores
             elif m in _RELEVANT_IDS_REQUIRED:
-                from app.eval.retrieval_metrics import (
+                from rag_benchmarking.app.eval.retrieval_metrics import (
                     mean_reciprocal_rank,
                     ndcg_at_k,
                     precision_at_k,

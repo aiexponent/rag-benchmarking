@@ -5,8 +5,8 @@ import json
 from pathlib import Path
 from typing import Any
 
-from app.eval.ragas_runner import run_evaluation
-from app.eval.reporting import write_report_files
+from rag_benchmarking.app.eval.ragas_runner import run_evaluation
+from rag_benchmarking.app.eval.reporting import write_report_files
 
 
 def load_jsonl(path: Path) -> list[dict[str, Any]]:

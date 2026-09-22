@@ -11,7 +11,7 @@ def _set_e2e_env(monkeypatch_module):
     monkeypatch_module.setenv("ENFORCE_API_KEY", "true")
     monkeypatch_module.setenv("LLM_PROVIDER", "echo")
     # Clear settings cache so the patched env is picked up
-    from app.config.settings import get_settings
+    from rag_benchmarking.app.config.settings import get_settings
 
     get_settings.cache_clear()
     yield
@@ -30,7 +30,7 @@ def monkeypatch_module(request):
 
 @pytest.fixture(scope="module")
 def client(_set_e2e_env):
-    from app.main import app
+    from rag_benchmarking.app.main import app
 
     return TestClient(app)
 

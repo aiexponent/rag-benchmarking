@@ -5,7 +5,7 @@ from typing import Any
 
 from fastapi.testclient import TestClient
 
-from app.main import app
+from rag_benchmarking.app.main import app
 
 
 def test_health_endpoint_structure() -> None:
