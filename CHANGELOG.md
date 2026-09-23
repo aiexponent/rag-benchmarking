@@ -7,16 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
+## [1.0.2] - 2026-09-23
 
-- Point the shipped project URLs and the README links at the `aiexponent` GitHub org. The org was renamed from `aiexponenthq`, so `pyproject.toml` `Repository`, `Documentation` and `Bug Tracker`, the README CI badge, the clone command, and the two sibling-project links all named an owner that only resolves through a GitHub redirect.
-- `app.__version__` now reads the installed distribution metadata instead of a
-  second hardcoded copy, which had drifted to `0.1.0` against a `1.0.1`
-  `pyproject.toml`. The value is served by `/health` and by the OpenAPI schema,
-  so a deployed instance was misreporting its own build.
-- `tests/test_health.py` and `tests/e2e/test_api_harness.py` now assert the
-  served version equals the installed version rather than only that the key is
-  present.
+Enterprise hardening, namespace isolation, strict CI quality gates, and community governance.
+
+### Added
+- **Namespace Isolation (PRD-173)**: Relocated `src/app` and `src/harness` under dedicated `src/rag_benchmarking/` namespace to eliminate global `site-packages` pollution. Added canonical public entrypoints at `rag_benchmarking` and `rag_benchmarking.sdk`.
+- **Community Health & Governance (PRD-175)**: Upgraded `CODE_OF_CONDUCT.md` to Contributor Covenant 2.1 with explicit 48-hour response SLA and dedicated reporting channels (`conduct@aiexponent.com`, `security@aiexponent.com`).
+- **Developer Guidance (PRD-175)**: Overhauled `CONTRIBUTING.md` with a 10-minute low-code evaluation dataset track (`data/golden/qa.jsonl`), modern verification commands (`ruff`, `mypy`, `pytest`, `lcc`), conventional commit standards, and PR expectations.
+- **Makefile Target**: Added `make lint` multi-gate convenience command (`ruff check`, `ruff format --check`, and `mypy src`).
+
+### Fixed
+- **Unmasked CI Quality & Security Gates (PRD-174)**:
+  - Removed `|| true` from `python -m mypy src` in CI, fixed all 16 typing errors across `src/`, and removed hardcoded `python_version` in `pyproject.toml` to support multi-version Python matrix (3.11 and 3.12).
+  - Removed `continue-on-error: true` from `security-audit` in CI; established documented `--ignore-vuln` waivers for transitive, unfixed advisories (`PYSEC-2026-3447`, `PYSEC-2026-76`, `PYSEC-2026-2447`, `PYSEC-2026-3046`).
+  - Enforced strict license gating (`sys.exit(1)`) under permissive policy in LCC CI workflow, excluding virtualenv false positives.
+- **Dynamic Version Resolution (#23)**: Derived `__version__` dynamically from installed distribution metadata instead of a hardcoded string. Enforced version equality assertions in health and E2E test suites.
+- **Ecosystem URL Migration (#22)**: Updated project repository, documentation, issue tracker, and README links to point directly to `aiexponent` org instead of legacy `aiexponenthq`.
+- **Repository Hygiene**: Removed legacy `[tool.black]` table from `pyproject.toml`.
+
+### Changed
+- **Brand Refresh (#19, #20, #21)**: Migrated to AiExponent Caret identity ("One mark. Two accents."), refreshed OpenGraph assets with EU AI Act status token, and purged retired split-A assets.
 
 ## [1.0.1] - 2026-05-10
 
