@@ -1,60 +1,117 @@
-<p align="center">
-  <a href="https://aiexponent.com"><img src=".github/brand/logo-full-light.png" alt="AiExponent — Building AI that deserves to be trusted" width="560"></a>
-</p>
-
-<h1 align="center">RAG Benchmarking</h1>
-<p align="center"><em>Prove your RAG system works — before you ship.</em></p>
-
-<p align="center">
-  <a href="https://pypi.org/project/rag-benchmarking/"><img src="https://img.shields.io/pypi/v/rag-benchmarking.svg" alt="PyPI"></a>
-  <a href="https://github.com/aiexponent/rag-benchmarking/actions"><img src="https://github.com/aiexponent/rag-benchmarking/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-0D5463.svg" alt="License: Apache 2.0"></a>
-  <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.11%2B-0D5463.svg" alt="Python 3.11+"></a>
-  <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689"><img src="https://img.shields.io/badge/EU%20AI%20Act-Article%2015-0D5463.svg" alt="EU AI Act Article 15"></a>
-  <a href="#privacy"><img src="https://img.shields.io/badge/telemetry-zero-0B7A4B.svg" alt="Zero telemetry"></a>
-</p>
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/aiexponent/rag-benchmarking/main/.github/brand/og.png">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/aiexponent/rag-benchmarking/main/.github/brand/og.png">
+    <img src="https://raw.githubusercontent.com/aiexponent/rag-benchmarking/main/.github/brand/og.png" alt="RAG Benchmarking — EU AI Act Article 15 Accuracy Evaluation Harness" width="100%"/>
+  </picture>
+  <h1 align="center">RAG Benchmarking</h1>
+  <p align="center"><em>Framework-agnostic evaluation harness for RAG and agentic AI systems.</em></p>
+  <p align="center">
+    <a href="https://pypi.org/project/rag-benchmarking/"><img src="https://img.shields.io/pypi/v/rag-benchmarking.svg?style=flat-square&color=0D5463" alt="PyPI version"></a>
+    <a href="https://github.com/aiexponent/rag-benchmarking/actions"><img src="https://img.shields.io/github/actions/workflow/status/aiexponent/rag-benchmarking/ci.yml?branch=main&style=flat-square&label=CI" alt="CI"></a>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-0D5463.svg?style=flat-square" alt="License: Apache 2.0"></a>
+    <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.11%2B-0D5463.svg?style=flat-square" alt="Python 3.11+"></a>
+    <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689"><img src="https://img.shields.io/badge/EU%20AI%20Act-Article%2015-0D5463.svg?style=flat-square" alt="EU AI Act Article 15"></a>
+    <a href="#privacy"><img src="https://img.shields.io/badge/telemetry-zero-0B7A4B.svg?style=flat-square" alt="Zero telemetry"></a>
+  </p>
+</div>
 
 ---
 
-**A framework-agnostic evaluation harness for RAG and agentic AI systems.**
+> **RAG Benchmarking provides empirical, deterministic accuracy and faithfulness evidence for EU AI Act Article 15 (Accuracy, Robustness, Cybersecurity) and Annex IV technical documentation. Apache 2.0, AS IS.**
+>
+> A framework-agnostic evaluation harness for LangChain, LlamaIndex, or custom RAG and agentic pipelines. Measures classic retrieval and generation quality alongside agentic tool-use fidelity, outputting structured JSON benchmark reports and SQLite run histories. Built for teams who must verify and prove AI system performance before deployment.
 
-Bring your own RAG pipeline — LangChain, LlamaIndex, or custom — and benchmark it against classic and agentic-era metrics. Built for teams who need to prove their AI systems work before they ship.
+---
 
-Built by [AI Exponent LLC](https://aiexponent.com). Provides **partial Art. 15(1) accuracy input** for high-risk AI systems — not Art. 15 robustness, not cybersecurity, not conformity evidence (see [scope panel](#eu-ai-act-article-15--partial-input-not-conformity-evidence)).
+## The Problem
+
+Under the EU AI Act ([Regulation (EU) 2024/1689](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689)), providers and deployers of **high-risk AI systems** (governed by Article 6 and Annex III) face mandatory statutory obligations under **Article 15 (Accuracy, Robustness, and Cybersecurity)**:
+
+* **Statutory Requirement**: High-risk AI systems must achieve appropriate levels of accuracy, robustness, and cybersecurity, and perform consistently throughout their lifecycle. Declared metrics and levels of accuracy must be documented in technical documentation (Annex IV) and instructions for use (Article 13).
+* **Statutory Non-Compliance Penalties**: Fines up to **€15,000,000 or 3% of total worldwide annual turnover** under Article 99(4).
+* **The Hallucination & Evidence Deficit**: Teams deploying RAG or autonomous agentic workflows struggle to prove that retrieved context is grounded, citations are truthful, and tools are called accurately across system updates.
+
+**RAG Benchmarking** provides the empirical evaluation infrastructure:
+
+> *"How do we measure, benchmark, and mathematically verify accuracy and faithfulness across model migrations and retrieval changes?"*
+
+Bring your own RAG or agent pipeline. Evaluate against 12+ classic and agentic-era metrics across curated golden datasets. Output audit-ready benchmark reports with zero telemetry.
+
+Built by [AI Exponent LLC](https://aiexponent.com). Apache 2.0. Runs entirely offline or via local API service after `pip install`.
 
 ---
 
 ## Quick Start
 
+### 1. Installation
+
 ```bash
 pip install rag-benchmarking
 ```
+
+### 2. Python SDK Evaluation
+
+```python
+from rag_benchmarking import RagEval
+
+# Initialize evaluation client
+client = RagEval(api_url="http://localhost:5001", api_key="your-key")
+
+# Works with LangChain
+# result = my_chain.invoke({"query": "What is Article 15?"})
+# sample = RagEval.from_langchain(result)
+
+# Or any standard dictionary with question / contexts / answer
+sample = {
+    "question": "What documentation must high-risk AI system deployers maintain under Article 26?",
+    "contexts": [
+        "Article 26(5) requires deployers of high-risk AI systems to keep system logs for at least six months."
+    ],
+    "answer": "Deployers must keep logs generated by high-risk AI systems for at least six months where appropriate.",
+}
+
+# Run benchmark evaluation
+report = client.evaluate([sample], metrics=["faithfulness", "answer_relevancy"])
+print(report["metrics"])
+# Output: {"faithfulness": 0.962, "answer_relevancy": 0.845}
+```
+
+### 3. Evaluate Agentic Traces
 
 ```python
 from rag_benchmarking import RagEval
 
 client = RagEval(api_url="http://localhost:5001", api_key="your-key")
 
-# Works with LangChain
-result = my_chain.invoke({"query": "What is RAG?"})
-sample = RagEval.from_langchain(result)
-
-# Or any dict with question / contexts / answer
-sample = {
-    "question": "What is RAG?",
-    "contexts": ["RAG stands for Retrieval-Augmented Generation."],
-    "answer": "RAG combines retrieval with LLM generation.",
+trace = {
+    "question": "What is the GPAI compliance deadline under Article 111?",
+    "final_answer": "Obligations for general-purpose AI models apply from 2 August 2025.",
+    "tool_calls": [
+        {
+            "tool_name": "eu_act_search",
+            "tool_input": {"query": "GPAI deadline Article 111"},
+            "tool_output": "Chapter V obligations apply from 2 August 2025.",
+            "step_index": 0,
+        }
+    ],
 }
 
-report = client.evaluate([sample], metrics=["faithfulness", "answer_relevancy"])
+report = client.evaluate_agent(trace, metrics=["source_attribution_accuracy", "tool_call_accuracy"])
 print(report["metrics"])
-# {"faithfulness": 0.958, "answer_relevancy": 0.810}
 ```
 
+### 4. Running the Evaluation Server
+
 ```bash
-# Start the evaluation server
-docker compose up
-# API docs: http://localhost:5001/docs
+# Clone the repository
+git clone https://github.com/aiexponent/rag-benchmarking.git
+cd rag-benchmarking
+
+# Start the evaluation server & vector store
+docker compose up -d
+
+# OpenAPI docs available at: http://localhost:5001/docs
 ```
 
 ---
@@ -63,18 +120,18 @@ docker compose up
 
 ```mermaid
 graph TD
-    RAG["Your RAG System\nLangChain · LlamaIndex · Custom"]
+    RAG["Your AI System\nLangChain · LlamaIndex · Custom RAG · Multi-Step Agent"]
     SDK["SDK Adapters\nRagEval.from_langchain()\nRagEval.from_llamaindex()"]
-    SCHEMA["EvalSample / AgentTrace\nrag_benchmarking/harness/schemas.py"]
-    RUNNER["EvaluationRunner\nrag_benchmarking/harness/runner.py"]
+    SCHEMA["EvalSample / AgentTrace\nrag_benchmarking.harness.schemas"]
+    RUNNER["EvaluationRunner\nrag_benchmarking.harness.runner"]
 
-    CLASSIC["Classic Metrics\nfaithfulness · answer_relevancy\ncontext_precision · context_recall"]
-    RETRIEVAL["Retrieval Metrics\nPrecision@K · Recall@K\nMRR · NDCG"]
-    AGENTIC["Agentic Metrics\nagent_faithfulness · tool_call_accuracy\nretrieval_necessity · source_attribution"]
+    CLASSIC["Classic Generation Metrics\nfaithfulness · answer_relevancy\ncontext_precision · context_recall"]
+    RETRIEVAL["Deterministic Retrieval Metrics\nPrecision@K · Recall@K\nMRR · NDCG"]
+    AGENTIC["Agentic Trace Metrics\nsource_attribution_accuracy · agent_faithfulness\ntool_call_accuracy · retrieval_necessity"]
 
-    REPORT["BenchmarkReport"]
-    STORE["SQLite ResultStore\nRun history + comparison"]
-    API["REST API\n/v1/evaluate · /v1/evaluate/agent\n/v1/runs · /v1/runs/compare"]
+    REPORT["BenchmarkReport\n(Structured JSON Evaluation Pack)"]
+    STORE["ResultStore\n(SQLite Run History & Comparison)"]
+    API["FastAPI REST Interface\n/v1/evaluate · /v1/evaluate/agent\n/v1/runs · /v1/runs/compare"]
 
     RAG --> SDK --> SCHEMA --> RUNNER
     RUNNER --> CLASSIC
@@ -99,206 +156,115 @@ graph TD
 
 ---
 
-## Metrics
+## Supported Evaluation Metrics
 
-### Classic RAG Metrics
+### 1. Generation & RAG Quality Metrics
 
-```mermaid
-graph LR
-    Q["question\ncontexts\nanswer"]
+| Metric | Description | Evaluator Type |
+| :--- | :--- | :--- |
+| `faithfulness` | Measures factual consistency of the answer against retrieved context (hallucination detection) | LLM Judge |
+| `answer_relevancy` | Measures whether the generated answer directly addresses the original question | LLM Judge |
+| `context_precision` | Measures whether ground-truth relevant chunks are ranked higher in retrieved context | LLM Judge |
+| `context_recall` | Measures whether retrieved context contains all facts required to answer the question | LLM Judge |
 
-    FAITH["faithfulness\nAre all claims in the\nanswer supported by context?"]
-    RELEV["answer_relevancy\nDoes the answer\naddress the question?"]
-    CPREC["context_precision\nAre retrieved chunks\nrelevant to the query?"]
-    CREC["context_recall\nDoes context contain\nenough to answer?"]
+### 2. Deterministic Retrieval Metrics
 
-    Q --> FAITH
-    Q --> RELEV
-    Q --> CPREC
-    Q --> CREC
+| Metric | Description | Evaluator Type |
+| :--- | :--- | :--- |
+| `precision_at_k` | Proportion of top-K retrieved documents that are relevant | Deterministic |
+| `recall_at_k` | Proportion of all relevant documents captured in top-K retrieval | Deterministic |
+| `mrr` | Mean Reciprocal Rank of the first relevant retrieved document | Deterministic |
+| `ndcg_at_k` | Normalized Discounted Cumulative Gain accounting for position relevance | Deterministic |
 
-    style Q fill:#1e3a5f,color:#fff
-    style FAITH fill:#c9a84c,color:#000
-    style RELEV fill:#c9a84c,color:#000
-    style CPREC fill:#c9a84c,color:#000
-    style CREC fill:#c9a84c,color:#000
-```
+### 3. Agentic-Era Trace Metrics
 
-| Metric | What it measures | LLM judge |
-|---|---|---|
-| `faithfulness` | Are all claims in the answer supported by context? | Yes |
-| `answer_relevancy` | Does the answer address the question? | Yes |
-| `context_precision` | Are retrieved chunks relevant to the query? | Yes |
-| `context_recall` | Does context contain enough to answer correctly? | Yes |
-| `precision_at_k` | Fraction of top-K retrieved docs that are relevant | No |
-| `recall_at_k` | Fraction of relevant docs found in top-K | No |
-| `mrr` | Reciprocal rank of first relevant doc | No |
-| `ndcg_at_k` | Rank-weighted retrieval quality | No |
-
-### Agentic-Era Metrics
-
-For multi-step agents, tool-using systems, and autonomous RAG pipelines:
-
-| Metric | What it measures | LLM judge |
-|---|---|---|
-| `source_attribution_accuracy` | Did the agent cite sources it actually retrieved? | No — deterministic |
-| `agent_faithfulness` | Is every reasoning step faithful to retrieved sources? | Yes |
-| `tool_call_accuracy` | Did the agent choose the right tool at the right time? | Yes |
-| `retrieval_necessity` | Was retrieval actually needed for this query? | Yes |
+| Metric | Description | Evaluator Type |
+| :--- | :--- | :--- |
+| `source_attribution_accuracy` | Verifies whether citations match actual retrieved chunk identifiers | Deterministic |
+| `agent_faithfulness` | Evaluates factual grounding across every intermediate reasoning step | LLM Judge |
+| `tool_call_accuracy` | Verifies whether the agent selected appropriate tools for the sub-task | LLM Judge |
+| `retrieval_necessity` | Measures whether external retrieval was genuinely required or superfluous | LLM Judge |
 
 ### Metric Groups
-
+Evaluate pre-configured metric suites with a single parameter:
 ```python
-# Use pre-defined groups
-report = client.evaluate(samples, metric_group="classic")
-report = client.evaluate(samples, metric_group="retrieval")
-report = client.evaluate(samples, metric_group="agentic_v1")
-report = client.evaluate(samples, metric_group="full")  # all metrics
+report = client.evaluate(samples, metric_group="classic")      # faithfulness, answer_relevancy, context_precision, context_recall
+report = client.evaluate(samples, metric_group="retrieval")    # precision@k, recall@k, mrr, ndcg@k
+report = client.evaluate(samples, metric_group="agentic_v1")   # source_attribution, agent_faithfulness, tool_accuracy
+report = client.evaluate(samples, metric_group="full")         # all supported metrics
 ```
 
 ---
 
-## Benchmarks
+## EU AI Act Article 15 — Empirical Evidence Scope
 
-Measured on the built-in 50-sample golden dataset (10 domains):
-
-| Metric | Score | Label |
-|---|---|---|
-| faithfulness | **0.958** | Excellent |
-| answer_relevancy | **0.810** | Good |
-
----
-
-## LLM Backend
-
-Several metrics use an LLM as a judge. Supported providers:
-
-```bash
-# .env
-LLM_PROVIDER=gemini       # recommended
-GEMINI_API_KEY=your-key
-
-# Or OpenAI
-LLM_PROVIDER=openai
-OPENAI_API_KEY=your-key
-```
-
-**Cost guidance:** A full classic-metrics pass on 50 samples costs ~$0.05–$0.15 with Gemini Flash or GPT-4o-mini. Source attribution accuracy is deterministic and costs nothing.
-
-**Determinism:** Judge calls run at `temperature=0.0`. For CI/CD, flag changes beyond ±0.05 rather than asserting exact scores.
-
----
-
-## API Reference
-
-```bash
-# Evaluate a RAG sample
-curl -X POST http://localhost:5001/v1/evaluate \
-  -H "X-API-Key: your-key" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "samples": [{"question": "What is RAG?",
-      "contexts": ["RAG is Retrieval-Augmented Generation."],
-      "answer": "RAG combines retrieval with generation."}],
-    "metrics": ["faithfulness", "answer_relevancy"]
-  }'
-
-# Evaluate an agentic trace
-curl -X POST http://localhost:5001/v1/evaluate/agent \
-  -H "X-API-Key: your-key" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "trace": {
-      "question": "What is the GPAI deadline?",
-      "final_answer": "GPAI obligations apply from August 2025.",
-      "tool_calls": [{"tool_name": "retrieve",
-        "tool_input": {"query": "GPAI deadline"},
-        "tool_output": "Article 53 obligations apply from August 2025.",
-        "step_index": 0}]
-    },
-    "metrics": ["source_attribution_accuracy", "tool_call_accuracy"]
-  }'
-
-# Compare runs
-curl -X POST http://localhost:5001/v1/runs/compare \
-  -H "X-API-Key: your-key" \
-  -d '["run-id-a", "run-id-b"]'
-```
-
----
-
-## EU AI Act Article 15 — partial input, not conformity evidence
-
-`rag-benchmarking` is an **evaluation harness** that measures **accuracy and faithfulness** for RAG and agentic systems. Those two metrics are *one* input among many that an Article 15 conformity assessment will draw on. They are **not** the conformity assessment itself, and the harness does **not** discharge an Article 15 obligation.
+`rag-benchmarking` is an **evaluation harness** that provides empirical accuracy and faithfulness measurements for RAG and agentic AI systems. Those metrics serve as critical input to Article 15 technical documentation, but do **not** constitute conformity assessment by themselves.
 
 ```mermaid
 graph LR
     RAG["rag-benchmarking\nevaluation harness"]
-    FAITH2["Faithfulness measurement\n(LLM-judge)"]
-    ANS["Answer-relevancy + retrieval metrics\n(deterministic)"]
-    AGENT2["Agentic-trace metrics\n(tool_call_accuracy, source_attribution)"]
-    REPORT2["BenchmarkReport\n→ telemetry input for\nArticle 15(1) accuracy claims"]
+    FAITH["Faithfulness & Grounding\n(LLM-judge)"]
+    RET["Retrieval Quality & Precision\n(deterministic)"]
+    AGENT["Agentic Tool & Attribution\n(trace evaluation)"]
+    REPORT["BenchmarkReport\n(Empirical telemetry for\nArticle 15(1) accuracy declarations)"]
 
-    RAG --> FAITH2 --> REPORT2
-    RAG --> ANS --> REPORT2
-    RAG --> AGENT2 --> REPORT2
+    RAG --> FAITH --> REPORT
+    RAG --> RET --> REPORT
+    RAG --> AGENT --> REPORT
 
     style RAG fill:#c9a84c,color:#000
-    style REPORT2 fill:#2d5a2d,color:#fff
+    style REPORT fill:#2d5a2d,color:#fff
 ```
 
-### What this tool covers, honestly
-
-- **Article 15(1) — accuracy declared in instructions for use.** The harness produces faithfulness, answer-relevancy and retrieval-quality metrics that a provider can cite as the empirical basis for the accuracy figures they declare on the system label. The tool does not declare for you, and it does not certify the figures.
+### What this tool covers
+* **Article 15(1) — Declared accuracy metrics in instructions for use**: Produces reproducible accuracy and faithfulness benchmarks that providers cite in technical documentation (Annex IV §2(b)) and instructions for use (Article 13).
 
 ### What this tool does NOT cover
-
-- **Article 15 robustness in the regulatory sense.** Robustness under Art. 15 means resilience to errors, faults and inconsistencies — including adversarial-input resilience. This harness has no perturbation generator, no out-of-distribution detector, no adversarial-passage suite. **If a tool tells you it does Art. 15 robustness with a faithfulness scorer, it is overclaiming.**
-- **Article 15 cybersecurity.** Adversarial prompt injection, jailbreak resistance, model-integrity controls. Out of scope. Pair with a runtime AI security control (e.g. AgentShield) for that leg.
-- **Conformity assessment.** Article 15 requires a notified-body conformity assessment for high-risk systems. A benchmark report is not a substitute for that process.
-- **Real-world testing under Art. 60.** The Art. 60 sandboxed-testing regime is a separate procedure with its own supervisory notifications. Out of scope.
-
-> **Penalty band, contextually.** Art. 15 obligations route through the Art. 16 provider-obligation chain to **Art. 99(4)** — up to **€15M or 3% of total worldwide annual turnover, whichever is higher** ([EUR-Lex](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689)). This number is here for context, not as a sales hook. The compliance pathway is broader than this tool.
+* **Article 15 Robustness**: Robustness under the EU AI Act entails adversarial input testing, out-of-distribution resilience, and perturbation analysis. (A faithfulness scorer is not an adversarial robustness test).
+* **Article 15 Cybersecurity**: Jailbreak resistance, prompt injection defenses, and pipeline security require dedicated runtime defenses.
+* **Conformity Assessment**: High-risk AI systems require formal conformity assessment procedures under Article 43. Benchmark reports provide supporting technical evidence, not regulatory certification.
 
 ---
 
-## AiExponent Toolchain
+## AiExponent Ecosystem Integration
 
-rag-benchmarking feeds accuracy evidence into RiskForge for Article 9 risk management:
+`rag-benchmarking` integrates directly into the AiExponent regulatory compliance toolchain:
 
 ```mermaid
 graph LR
-    LCC["LCC\n(Art. 53 licenses)"]
-    RAG["rag-benchmarking\n(Art. 15 accuracy)"]
-    RF["RiskForge\n(Art. 9 risk management)"]
-    TD["TransparencyDeck\n(Art. 13 docs)"]
+    LCC["LCC\n(Art. 53 Licenses)"]
+    RAG["rag-benchmarking\n(Art. 15 Accuracy)"]
+    RF["RiskForge\n(Art. 9 Risk Management)"]
+    DOC["Document Analyser\n(Annex IV Tech Docs)"]
 
-    LCC -->|"license evidence"| RF
+    LCC -->|"license compliance SBOM"| RF
     RAG -->|"benchmark_report.json\naccuracy evidence"| RF
-    RF -->|"rmf.json"| TD
+    RF -->|"tamper-evident RMF"| DOC
 
     style RAG fill:#c9a84c,color:#000
     style LCC fill:#1e3a5f,color:#fff
     style RF fill:#1e3a5f,color:#fff
-    style TD fill:#1e3a5f,color:#fff
+    style DOC fill:#1e3a5f,color:#fff
 ```
 
 ---
 
 ## Configuration
 
+Configure environment variables via `.env`:
+
 ```bash
-# .env
-LLM_PROVIDER=gemini
-GEMINI_API_KEY=...
-OPENAI_API_KEY=...
+# LLM Judge Provider
+LLM_PROVIDER=gemini              # gemini (recommended) or openai
+GEMINI_API_KEY=your-gemini-key
+OPENAI_API_KEY=your-openai-key
 
-# Vector store (built-in RAG pipeline only)
+# Optional Vector Store (for built-in RAG pipeline)
 QDRANT_URL=https://your-cluster.qdrant.io
-QDRANT_API_KEY=...
+QDRANT_API_KEY=your-qdrant-key
 
-# API authentication
-API_KEY=your-secret-key
+# API Authentication & Security
+API_KEY=your-secure-api-key
 ENFORCE_API_KEY=true
 ```
 
@@ -309,45 +275,46 @@ ENFORCE_API_KEY=true
 ```
 src/
   rag_benchmarking/
-    __init__.py       # Public entrypoints (RagEval, EvaluationRunner, ResultStore, ...)
-    sdk/              # rag_benchmarking.sdk entrypoint
-    harness/          # Framework-agnostic evaluation harness
-      schemas.py      # EvalSample, AgentTrace, BenchmarkReport
-      protocol.py     # RAGEvaluable Protocol — the plug-in contract
-      runner.py       # EvaluationRunner — orchestrates metrics
-      result_store.py # SQLite persistence
+    __init__.py          # Public exports (RagEval, EvaluationRunner, ResultStore, ...)
+    sdk/                 # Dedicated SDK entrypoint (from rag_benchmarking.sdk import RagEval)
+    harness/             # Framework-agnostic benchmark harness
+      schemas.py         # EvalSample, AgentTrace, BenchmarkReport, RunConfig
+      protocol.py        # RAGEvaluable Protocol — plug-in interface
+      runner.py          # EvaluationRunner — metric orchestration
+      result_store.py    # SQLite persistence & run comparisons
     app/
-      api/            # FastAPI endpoints
-      eval/           # Metric implementations
-      retrieval/      # Embeddings, chunking, Qdrant store, reranker
-      engine/         # RAGEngine
-      llm/            # LLM client
-      config/         # Settings
+      api/               # FastAPI endpoints (/v1/evaluate, /v1/runs)
+      eval/              # RAGAS and custom metric runners
+      retrieval/         # Chunking, embeddings, Qdrant store, reranker
+      engine/            # RAGEngine reference implementation
+      llm/               # Unified LLM client (OpenAI & Gemini)
+      config/            # Pydantic settings & environment configuration
 data/
-  golden/qa.jsonl     # 50-sample golden dataset (10 domains)
+  golden/qa.jsonl        # 50-sample golden evaluation dataset (10 domains)
 ```
 
 ---
 
-## Known Limitations
+## Releases
 
-- English-only benchmark datasets; no multilingual evaluation.
-- Custom dataset integration requires manual formatting to the JSONL schema.
-- Accuracy metrics only — latency and throughput are not measured.
-- LLM-as-judge quality depends on the configured judge model.
-- Rate limiting is in-memory and resets on server restart.
+| Version | Highlights |
+|---|---|
+| **[v1.0.2](https://github.com/aiexponent/rag-benchmarking/releases/tag/v1.0.2)** | Namespace isolation (`rag_benchmarking`), unmasked CI quality gates (`mypy`, `pip-audit`, `lcc`), Contributor Covenant 2.1 Code of Conduct with 48h SLA, modernized Contributing guide, dynamic metadata versioning, direct `aiexponent` URLs, 5-tool reciprocal footer, flat-square badges, and Dependabot. |
+| [v1.0.1](https://github.com/aiexponent/rag-benchmarking/releases/tag/v1.0.1) | Agent endpoint shape parity (`scores` → `metrics`), SDK plural `ground_truths` docstring alignment, Gemini 2.5 Flash default. |
+| [v1.0.0](https://github.com/aiexponent/rag-benchmarking/releases/tag/v1.0.0) | Production baseline release: Path A reframing, schema reconciliation, authenticity pass, 50-sample golden dataset. |
 
 ---
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Issues and PRs welcome.
+We welcome community contributions! Please review [CONTRIBUTING.md](CONTRIBUTING.md) for local setup, commit conventions, and testing instructions.
 
 ```bash
-git clone https://github.com/aiexponent/rag-benchmarking
+git clone https://github.com/aiexponent/rag-benchmarking.git
 cd rag-benchmarking
-pip install -e ".[test]"
-pytest
+pip install -e ".[test,lint]"
+make lint
+make test
 ```
 
 ---
@@ -360,7 +327,19 @@ Built by [AI Exponent LLC](https://aiexponent.com) — `hello@aiexponent.com`
 
 ---
 
-*Part of the AiExponent open-source AI governance toolchain:
-[license-compliance-checker](https://github.com/aiexponent/license-compliance-checker) ·
-**rag-benchmarking** ·
-[RiskForge](https://github.com/aiexponent/riskforge)*
+*Part of the AiExponent open-source AI governance toolchain:*  
+[litmusai](https://github.com/aiexponent/litmusai) (Art. 5) · 
+[license-compliance-checker](https://github.com/aiexponent/license-compliance-checker) (Art. 53) · 
+**rag-benchmarking** (Art. 15) · 
+[riskforge](https://github.com/aiexponent/riskforge) (Art. 9) · 
+[agentic-document-analyser](https://github.com/aiexponent/agentic-document-analyser) (Art. 9 / Annex IV)
+
+---
+
+<div align="center">
+  <sub>
+    <a href="https://aiexponent.com">aiexponent.com</a> ·
+    <a href="mailto:hello@aiexponent.com">hello@aiexponent.com</a> ·
+    Built in the open · Apache 2.0
+  </sub>
+</div>
