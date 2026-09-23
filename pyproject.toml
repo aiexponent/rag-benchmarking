@@ -57,7 +57,7 @@ test = [
 # under the prior version. Pinning here means a deliberate version bump
 # is needed to flip new rules on, which is the right authoring loop.
 lint = [
-  "ruff==0.15.12",
+  "ruff==0.16.8",
   "mypy>=1.10",
 ]
 
